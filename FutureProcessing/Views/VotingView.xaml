@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="FutureProcessing.Views.VotingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FutureProcessing.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"         
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:helpers="clr-namespace:Infrastructure.Helpers;assembly=Infrastructure"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             Height="400" Width="600"
+             Dialog:DialogParticipation.Register="{Binding}">
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <GroupBox Header="Choose a candidate" 
+                  Margin="0 5 0 5" >
+
+            <ListView 
+                        ItemsSource="{Binding Candidates}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gainsboro" BorderThickness="1" Margin="3" CornerRadius="3"
+                                helpers:ReadOnlyContainer.IsReadOnly="{Binding DataContext.IsReadOnly, RelativeSource={RelativeSource AncestorType=local:VotingView}}">
+                            <Grid Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding Candidate.name}" FontWeight="Bold"/>
+                                </WrapPanel>
+                                <WrapPanel Grid.Row="1" Margin="5 3 0 3">
+                                    <TextBlock Text="Partia: " FontStyle="Italic"/>
+                                    <TextBlock Text="{Binding Candidate.party}" />
+                                </WrapPanel>
+                                <WrapPanel Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                    <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                </WrapPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </GroupBox>
+
+        <StackPanel Grid.Row="1">
+            <Button Content="VOTE !" Margin="10" Width="100" Height="35" 
+                    Command="{Binding VoteCommand}" IsEnabled="{Binding IsReadOnly, Converter={StaticResource InverseBooleanConverter}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
